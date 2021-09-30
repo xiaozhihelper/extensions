@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "小智助手",
-	"version": "1.0",
+	"version": "1.0.1",
 	"description": "fast vpn.",
 	"author": "hao",
 	"icons": {
@@ -9,20 +9,19 @@
 		"128": "/assets/icon.png"
 	},
 	"browser_action": {
-		"default_icon": "/assets/icon_pending.png",
+		"browser_style": false,
+		"default_icon": "/assets/icon.png",
 		"default_popup": "popup.html"
 	},
 	"background": {
-		"scripts": [
-			"/js/crypto-js.js",
-			"/js/background-script.js"
-		]
-	},
-	"homepage_url": "https://www.baidu.com",
+        "page": "background.html"
+    },
+	"homepage_url": "https://xiaozhihelper.github.io",
 	"web_accessible_resources": [
 		"inject.js"
 	],
 	"permissions": [
-		"proxy", "https://*/*", "http://*/*", "background", "management", "cookies"
-	]
+		"proxy", "webRequest", "webRequestBlocking", "activeTab", "https://*/*", "http://*/*", "<all_urls>"
+	],
+	"content_security_policy": "style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; object-src 'self';"
 }

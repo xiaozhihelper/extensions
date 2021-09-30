@@ -1,50 +1,40 @@
-﻿console.log("popup")
-
-const CLOSED = 'CLOSED'
-const OPEN = 'OPEN'
-const CLASH = 'CLASH'
-
-const backgroundPage = chrome.extension.getBackgroundPage();
-const stopBtn = document.getElementById("stopVpn");
-const openBtn = document.getElementById("openVpn");
-const disabledBtn = document.getElementById("disabledBtn");
-
-function updateStatus() {
-    backgroundPage.getVpnStatus((status) => {
-        if (status === CLASH) {
-            document.getElementById("clash").style.display = "block";
+﻿new Vue({
+    el: '#app',
+    data: {
+        bg: chrome.extension.getBackgroundPage(),
+        proxies: [],
+        proxy: 'auto',
+    },
+    mounted() {
+        console.log('mounted')
+        this.proxies = this.bg.proxies
+        let value = localStorage.getItem('mN2ta_gfmqmYpbai')
+        if (value) {
+            if (value !== 'direct' && value !== 'auto') {
+                let found = false;
+                for (let i in this.proxies) {
+                    const it = this.proxies[i]
+                    if (it.proxy === value) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    value = 'auto';
+                    localStorage.setItem('mN2ta_gfmqmYpbai', value)
+                }
+            }
+            this.proxy = value
         }
-        document.getElementById("status").innerHTML = status
-        if (status === OPEN) {
-            stopBtn.style.display = "block";
-            disabledBtn.style.display = "none";
-            openBtn.style.display = "none";
-        } else {
-            stopBtn.style.display = "none";
-            disabledBtn.style.display = "none";
-            openBtn.style.display = "block";
+        this.bg.test_speed()
+    },
+    methods: {
+        setProxy: function (value) {
+            if (this.proxy !== value) {
+                this.proxy = value;
+                localStorage.setItem('mN2ta_gfmqmYpbai', value)
+                this.bg.set_proxy(value)
+            }
         }
-    })
-}
-
-
-function bindEvents() {
-    stopBtn.onclick = function () {
-        backgroundPage.stopVpn(() => {
-            updateStatus();
-        })
     }
-    openBtn.onclick = function () {
-        openBtn.style.display = "none";
-        stopBtn.style.display = "none";
-        disabledBtn.style.display = "block"
-        backgroundPage.startVpn(() => {
-            updateStatus();
-            document.getElementById("clash").style.display = "none";
-
-        })
-    }
-}
-
-bindEvents();
-updateStatus();
+});

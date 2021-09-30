@@ -3,97 +3,45 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>小智助手</title>
-	<style>
-		.green-button {
-			background-color: #21ba45 !important;
-			color: #fff !important;
-			text-shadow: none !important;
-			background-image: none !important;
-		}
-
-		.red-button {
-			background-color: #db2828 !important;
-			color: #fff !important;
-			text-shadow: none !important;
-			background-image: none !important;
-		}
-
-		.grey-button {
-			background-color: #767676 !important;
-			color: #fff !important;
-			text-shadow: none !important;
-			background-image: none !important;
-		}
-
-		.ui-button {
-			cursor: pointer;
-			display: inline-block;
-			min-height: 1em;
-			outline: 0;
-			border: none;
-			vertical-align: baseline;
-			background: #e0e1e2 none;
-			color: rgba(0, 0, 0, .6);
-			font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-			margin: 0 .25em 0 0;
-			padding: .78571429em 1.5em .78571429em;
-			text-transform: none;
-			text-shadow: none;
-			font-weight: 700;
-			line-height: 1em;
-			font-style: normal;
-			text-align: center;
-			text-decoration: none;
-			border-radius: .28571429rem;
-			-webkit-box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgb(34 36 38 / 15%) inset;
-			box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgb(34 36 38 / 15%) inset;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-			-webkit-transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
-			transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
-			transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
-			transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
-			will-change: '';
-			-webkit-tap-highlight-color: transparent;
-		}
-
-		.fluid-button {
-			width: 100%;
-		}
-
-		.field {
-			clear: both;
-			margin: 1em 0 1em;
-		}
-
-		.hide {
-			display: none;
-		}
-
-		.show {
-			display: block;
-		}
-	</style>
+	<title>小智助手S</title>
+	<link href="/css/font.min.css" rel="stylesheet">
+	<link href="/css/popup.css" rel="stylesheet">
 </head>
 
-<body style="width:200px;min-height:100px;">
-	<h3>小智助手</h3>
-	<div id="clash" style="display: none">
-		<span style="color:red;">检测到其他代理扩展</span>
+<body>
+	<div id="app">
+		<!-- <div class="header">
+			小智助手 S
+		</div> -->
+		<ul class="styled-ul">
+			<li class="sep-b">
+				<span>
+					小智助手
+				</span>
+			</li>
+			<li :class="{active: proxy === 'direct' }" @click="setProxy('direct')">
+				<span>
+					<i class="fas fa-link"></i>
+					直接连接
+				</span>
+			</li>
+			<li :class="{active: proxy === 'auto' }" class="sep" @click="setProxy('auto')">
+				<span>
+					<i class="fas fa-random"></i>
+					自动连接
+				</span>
+			</li>
+			<li v-for="item in proxies"  :class="{active: proxy === item.proxy }" @click="setProxy(item.proxy)" v-show="item.proxy === proxy || item.speed != -1" >
+				<span>
+					<i class="fas fa-server"></i>
+					{{ item.name }}
+				</span>
+				<span class="speed" :class="{ fast: item.speed >= 0 && item.speed < 500, slow: item.speed >= 500, disconnect: item.speed < 0 }">{{ item.speed }}ms</span>
+			</li>
+		</ul>
 	</div>
-	<div>
-		当前状态: <span id="status"></span>
-	</div>
-	<div class="field">
-		<button style="display:none" class="fluid-button red-button ui-button" type="button" id="stopVpn">停止</button>
-		<button style="display:none" class="fluid-button grey-button ui-button" disabled type="button" id="disabledBtn">启动中</button>
-		<button style="display:none" class="fluid-button green-button ui-button" type="button" id="openVpn">启动</button>
-
-	</div>
-	<script type="text/javascript" src="js/popup.js"></script>
+	<script src="/lib/vue.min.js"></script>
+	<script src="/js/popup.js"></script>
 </body>
 
 </html>
